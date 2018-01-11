@@ -1,0 +1,70 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+
+<style>
+    .jumbotron form input{float:left; margin:0 5px 0}
+    .jumbotron form input[type="text"] {
+        max-width: 700px;
+        width: 100%;
+    }
+    .jumbotron form a {
+        font-size: 17px;
+        padding: 13.5px 15px;
+        border: none;
+        border-radius: 2px;
+    }
+
+</style>
+
+<div class="jumbotron">
+    <div class="row">
+
+        @using (Ajax.BeginForm("Index", "Home", null, new AjaxOptions
+        {
+            HttpMethod = "POST",
+            OnSuccess = "SuccessMessage",
+            OnFailure = "FailMessage",
+            OnBegin = "ValidateCourse"
+        }, new { id = "coursesubmit" })) // set new Id name for  Form
+        {
+            @Html.AntiForgeryToken()
+
+            @Html.Editor("course")
+           
+            <input type="submit" value="Submit" />          <a href="/" class="btn btn-primary">Refresh</a>
+            <a href="/home/about" class="btn btn-primary">Result</a>
+
+        }
+
+    </div>
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+    <script>
+        //\\\\\\\ JS  retrun message SucccessPost or FailPost
+        function ValidateCourse(data) {
+            var course = $("#course").val();
+            if (course == "") {
+                alert("Please fill in the course.");
+                return false;
+            }
+            else if (course.indexOf(":") <0) {
+                alert("Please input course in valid format.");
+                return false;
+            }
+        }
+        function SuccessMessage(data) {
+            alert(data);
+        }
+        function FailMessage(data) {
+            debugger;
+            alert(data.responseText);
+        }
+    </script>
+</div>
+
+
+
+
+
